@@ -7,8 +7,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="C:\Users\Administrator\Desktop\MasterMind0.1.cs" Link="MasterMind0.1.cs" />
-  </ItemGroup>
-
 </Project>
