@@ -1,67 +1,96 @@
 ﻿using System;
 using System.Threading;
+
 namespace mastermind
 {
     class mastermindbase
     {
-        static int[] settings = { 0, 10, 4, 6 };//inputType, maxAttempts, positions, optionAmount
+        public int[] settings = { 0, 10, 4, 6 };//inputType, maxAttempts, positions, optionAmount
+
         static void Main()
         {
-            Console.Clear();    
+           mastermindbase mastermind = new mastermindbase();
+            mastermind.Start(); 
+        }
+
+        public void Start()
+        {
+            bool end;
+            do
+            {
+                ShowMenu();
+                end = ChooseOption();
+            } while (!end);
+        }
+       
+
+        public void ShowMenu()
+        {
+            Console.Clear();
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Welcome to....");
             Console.SetCursorPosition(0, 4);
             Thread.Sleep(250);
-            Console.WriteLine("                  ███╗░░░███╗░█████╗░░██████╗████████╗███████╗██████╗░███╗░░░███╗██╗███╗░░██╗██████╗░");
+            Console.WriteLine(
+                "                  ███╗░░░███╗░█████╗░░██████╗████████╗███████╗██████╗░███╗░░░███╗██╗███╗░░██╗██████╗░");
             Thread.Sleep(250);
-            Console.WriteLine("                  ████╗░████║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗████╗░████║██║████╗░██║██╔══██╗");
+            Console.WriteLine(
+                "                  ████╗░████║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗████╗░████║██║████╗░██║██╔══██╗");
             Thread.Sleep(250);
-            Console.WriteLine("                  ██╔████╔██║███████║╚█████╗░░░░██║░░░█████╗░░██████╔╝██╔████╔██║██║██╔██╗██║██║░░██║");
+            Console.WriteLine(
+                "                  ██╔████╔██║███████║╚█████╗░░░░██║░░░█████╗░░██████╔╝██╔████╔██║██║██╔██╗██║██║░░██║");
             Thread.Sleep(250);
-            Console.WriteLine("                  ██║╚██╔╝██║██╔══██║░╚═══██╗░░░██║░░░██╔══╝░░██╔══██╗██║╚██╔╝██║██║██║╚████║██║░░██║");
+            Console.WriteLine(
+                "                  ██║╚██╔╝██║██╔══██║░╚═══██╗░░░██║░░░██╔══╝░░██╔══██╗██║╚██╔╝██║██║██║╚████║██║░░██║");
             Thread.Sleep(250);
-            Console.WriteLine("                  ██║░╚═╝░██║██║░░██║██████╔╝░░░██║░░░███████╗██║░░██║██║░╚═╝░██║██║██║░╚███║██████╔╝");
+            Console.WriteLine(
+                "                  ██║░╚═╝░██║██║░░██║██████╔╝░░░██║░░░███████╗██║░░██║██║░╚═╝░██║██║██║░╚███║██████╔╝");
             Thread.Sleep(250);
-            Console.WriteLine("                  ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝╚═╝░░░░░╚═╝╚═╝╚═╝░░╚══╝╚═════╝░");
+            Console.WriteLine(
+                "                  ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝╚═╝░░░░░╚═╝╚═╝╚═╝░░╚══╝╚═════╝░");
             Thread.Sleep(250);
             Console.SetCursorPosition(0, 12);
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(" Instructions");
-            Console.WriteLine(" You have received an encrypted message, but it's encrypted... So, in order to decipher it yo need to crack a 4 letter code before anything");
-            Console.WriteLine(" Be careful though, as you have a limited number of attempts before the message gets destroyed");
-            Console.WriteLine("");
-            Console.WriteLine(" How it works");
-            Console.WriteLine(" Introduce 4 letters from A to F");
-            Console.WriteLine(" If you introduce the right code, congrats! You did it");
-            Console.WriteLine(" If not, no worries you will get a hint to help you, which will indicate");
-            Console.WriteLine(" #: Correct letter(s), in the right position");
-            Console.WriteLine(" *: Correct letter(s), but not where it should be");
-            Console.WriteLine(" ·: No luck, try with different letter(s)");
-            Console.WriteLine(" That's All, Have Fun!!!");
+            Console.WriteLine(
+                " You have received an encrypted message, but it's encrypted... So, in order to decipher it yo need to crack a 4 letter code before anything\n" +
+                " Be careful though, as you have a limited number of attempts before the message gets destroyed\n\n" +
+                
+                " How it works\n" +
+                " Introduce 4 letters from A to F\n" +
+                " If you introduce the right code, congrats! You did it\n" +
+                " If not, no worries you will get a hint to help you, which will indicate\n" + 
+                " #: Correct letter(s), in the right position\n" +
+                " *: Correct letter(s), but not where it should be\n" + 
+                " ·: No luck, try with different letter(s)\n" +
+                " That's All, Have Fun!!!");
             Console.SetCursorPosition(0, Console.CursorTop + 3);
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("[1]:Start Game");
             Console.WriteLine("[2]:Settings");
-            Console.WriteLine("[3]:Close Game");
-
+            Console.WriteLine("[x]:Close Game");
+        }
+        public bool ChooseOption()
+        {
             do
             {
                 var input = Console.ReadKey();
                 switch (input.KeyChar)
                 {
                     case '1':
-                        Game();
+                        Game game = new Game();
+                        game.Start(settings);
                         break;
                     case '2':
                         Settings();
                         break;
-                    case '3':
-                        Environment.Exit(0);
-                        break;
+                    case 'x':
+                        return true;
                 }
-            } while (true);
+            }
+            while (true);
         }
-        static bool keepcurrent()
+        static bool KeepCurrent()
         {
             Console.WriteLine("Invalid input, keep current? (Y/n)");
 
@@ -98,7 +127,7 @@ namespace mastermind
             } while (true);
         }*/
         //Unimplemented code due issues to saving/loading settings file
-        static void Settings()
+        public void Settings()
         { 
             Console.Clear();
             int[,] settingsBounds = { { 0, 1 }, { 5, 50 }, { 2, 10 }, { 3, 9 } }; //InputType(min,max), MaxAttemps(min,max), Positions(min,max), Optionamont (min,max)
@@ -118,7 +147,7 @@ namespace mastermind
                     bool validNumber = Int32.TryParse(Console.ReadLine(), out int input);
                     if (!validNumber || input < settingsBounds[i,0] || input > settingsBounds[i,1])
                     {
-                        bool keep = keepcurrent();
+                        bool keep = KeepCurrent();
                         if (keep)
                             validInput = true;
                     }
@@ -129,12 +158,10 @@ namespace mastermind
                     }
                 }
                 while (!validInput);
-                validInput = false;
             }
             Console.WriteLine("Settings Saved, Returning to main menu...");
-            Main();
         }
-        static void Game()
+        public void Game()
         {
             Console.Clear();
             Random rng = new Random();
