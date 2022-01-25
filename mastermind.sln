@@ -1,9 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31903.59
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mastermind", "mastermind\mastermind.csproj", "{437FA636-FAB1-4411-A4FF-5A15170CF978}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mastermind", "mastermind\mastermind.csproj", "{1496ED50-18EA-4227-8EB5-8B3A62E98614}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +8,9 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{437FA636-FAB1-4411-A4FF-5A15170CF978}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{437FA636-FAB1-4411-A4FF-5A15170CF978}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{437FA636-FAB1-4411-A4FF-5A15170CF978}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{437FA636-FAB1-4411-A4FF-5A15170CF978}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {E660C90E-1F30-48BF-AB2F-7E1353286AF2}
+		{1496ED50-18EA-4227-8EB5-8B3A62E98614}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1496ED50-18EA-4227-8EB5-8B3A62E98614}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1496ED50-18EA-4227-8EB5-8B3A62E98614}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1496ED50-18EA-4227-8EB5-8B3A62E98614}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
