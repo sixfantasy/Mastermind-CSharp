@@ -3,19 +3,19 @@ using System.Threading;
 
 namespace mastermind
 {
-    class mastermindbase
+    class Mastermindbase
     {
         public int[] settings = {0, 10, 4, 6}; //inputType, maxAttempts, positions, optionAmount
 
         static void Main()
         {
-            mastermindbase mastermind = new mastermindbase();
+            Console.ReadKey();
+            Mastermindbase mastermind = new Mastermindbase();
             mastermind.Start();
         }
 
         public void Start()
         {
-            Sequences.
             bool end;
             do
             {
@@ -28,28 +28,7 @@ namespace mastermind
         public void ShowMenu()
         {
             Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Welcome to....");
-            Console.SetCursorPosition(0, 4);
-            Thread.Sleep(250);
-            Console.WriteLine(
-                "                  ███╗░░░███╗░█████╗░░██████╗████████╗███████╗██████╗░███╗░░░███╗██╗███╗░░██╗██████╗░");
-            Thread.Sleep(250);
-            Console.WriteLine(
-                "                  ████╗░████║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗████╗░████║██║████╗░██║██╔══██╗");
-            Thread.Sleep(250);
-            Console.WriteLine(
-                "                  ██╔████╔██║███████║╚█████╗░░░░██║░░░█████╗░░██████╔╝██╔████╔██║██║██╔██╗██║██║░░██║");
-            Thread.Sleep(250);
-            Console.WriteLine(
-                "                  ██║╚██╔╝██║██╔══██║░╚═══██╗░░░██║░░░██╔══╝░░██╔══██╗██║╚██╔╝██║██║██║╚████║██║░░██║");
-            Thread.Sleep(250);
-            Console.WriteLine(
-                "                  ██║░╚═╝░██║██║░░██║██████╔╝░░░██║░░░███████╗██║░░██║██║░╚═╝░██║██║██║░╚███║██████╔╝");
-            Thread.Sleep(250);
-            Console.WriteLine(
-                "                  ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝╚═╝░░░░░╚═╝╚═╝╚═╝░░╚══╝╚═════╝░");
-            Thread.Sleep(250);
+            Sequences.Intro();
             Console.SetCursorPosition(0, 12);
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(" Instructions");
@@ -86,10 +65,10 @@ namespace mastermind
                             Sequences.Win();
                         else
                             Sequences.Lose();
-                        break;
+                        return false;
                     case '2':
                         Settings();
-                        break;
+                        return false;
                     case 'x':
                         return true;
                 }

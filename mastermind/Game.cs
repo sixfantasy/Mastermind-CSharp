@@ -1,8 +1,4 @@
 using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.Design;
-using System.Threading;
-
 namespace mastermind
 {
     public class Game
@@ -18,7 +14,7 @@ namespace mastermind
                 switch (inputType)
             { 
                 case 0:
-                    letterGen = Convert.ToChar(rng.Next(1, optionAmount + 1) + 'A');
+                    letterGen = Convert.ToChar(rng.Next(0, optionAmount) + 'A');
                     secret += letterGen;
                     break;
                 case 1:
@@ -38,13 +34,12 @@ namespace mastermind
                 else
                     final += input[i];
             }
-            return (string)final;
+            return final;
         }
 
         public bool Start(int[] settings)
         {
             Console.Clear();
-            Random rng = new Random();
             inputType = settings[0];
             maxAttempts = settings[1];
             positions = settings[2];
@@ -56,9 +51,9 @@ namespace mastermind
             for (int i = 0; i < maxAttempts; i++)
             {
                 guess = DoAttempt(secret, i);
-                if (CheckAttempt(secret, guess, guesshistory, i));
+                if (CheckAttempt(secret, guess, guesshistory, i))
                     return true;
-                
+                HintDisplayer(guesshistory);
             }
             return false;
         }
@@ -115,11 +110,11 @@ namespace mastermind
         {
             int result = 0;
             for (int i = 0; i < secretcheck.Length; i++) 
-            for (int j = 0; i < secretcheck.Length; i++)
+            for (int j = 0; j < secretcheck.Length; j++)
                 if (secretcheck[i] == guesscheck[j] && secretcheck[i]!=' '&& guesscheck[j]!=' ')
                 {
                     secretcheck[i] = ' ';
-                    guesscheck[i] = ' ';
+                    guesscheck[j] = ' ';
                     result++;
                 }
             return result;
@@ -146,6 +141,15 @@ namespace mastermind
                 }
             }
             return guess + " " + hint;
+        }
+
+        public void HintDisplayer(string[] guesshistory)
+        {
+            Console.Clear();
+            Console.SetCursorPosition(0, 3);
+            for (int i = 0; i < guesshistory.Length; i++)
+                Console.WriteLine(guesshistory[i]);
+            Console.SetCursorPosition(0, 0);
         }
     }
     
