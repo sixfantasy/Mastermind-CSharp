@@ -136,7 +136,7 @@ namespace mastermind
         }
         public bool CheckAttempt(string secret, string guess, int index)
         {
-            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.ForegroundColor = ConsoleColor.Cyan;
             char[] secretcheck = new char[secret.Length];
             char[] guesscheck = new char[guess.Length];
             for (int i = 0; i < secretcheck.Length; i++)

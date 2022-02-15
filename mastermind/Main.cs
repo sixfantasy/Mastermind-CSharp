@@ -19,6 +19,7 @@ namespace mastermind
             bool end;
             do
             {
+                Console.ReadLine();
                 Sequences.Intro();
                 ShowMenu();
                 end = ChooseOption();
