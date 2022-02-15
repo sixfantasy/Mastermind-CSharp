@@ -1,24 +1,25 @@
 ﻿using System;
-using System.Threading;
+using System.IO;
 
 namespace mastermind
 {
-    class mastermindbase
+    class Mastermindbase
     {
-        public int[] settings = {0, 10, 4, 6}; //inputType, maxAttempts, positions, optionAmount
+        public int[] Settings = {0, 10, 4, 6, 2}; //inputType, maxAttempts, positions, optionAmount, Validation
 
         static void Main()
         {
-            mastermindbase mastermind = new mastermindbase();
+            Mastermindbase mastermind = new Mastermindbase();
             mastermind.Start();
         }
 
         public void Start()
         {
-            Sequences.
+             
             bool end;
             do
             {
+                Sequences.Intro();
                 ShowMenu();
                 end = ChooseOption();
             } while (!end);
@@ -27,36 +28,11 @@ namespace mastermind
 
         public void ShowMenu()
         {
-            Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Welcome to....");
-            Console.SetCursorPosition(0, 4);
-            Thread.Sleep(250);
-            Console.WriteLine(
-                "                  ███╗░░░███╗░█████╗░░██████╗████████╗███████╗██████╗░███╗░░░███╗██╗███╗░░██╗██████╗░");
-            Thread.Sleep(250);
-            Console.WriteLine(
-                "                  ████╗░████║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗████╗░████║██║████╗░██║██╔══██╗");
-            Thread.Sleep(250);
-            Console.WriteLine(
-                "                  ██╔████╔██║███████║╚█████╗░░░░██║░░░█████╗░░██████╔╝██╔████╔██║██║██╔██╗██║██║░░██║");
-            Thread.Sleep(250);
-            Console.WriteLine(
-                "                  ██║╚██╔╝██║██╔══██║░╚═══██╗░░░██║░░░██╔══╝░░██╔══██╗██║╚██╔╝██║██║██║╚████║██║░░██║");
-            Thread.Sleep(250);
-            Console.WriteLine(
-                "                  ██║░╚═╝░██║██║░░██║██████╔╝░░░██║░░░███████╗██║░░██║██║░╚═╝░██║██║██║░╚███║██████╔╝");
-            Thread.Sleep(250);
-            Console.WriteLine(
-                "                  ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝╚═╝░░░░░╚═╝╚═╝╚═╝░░╚══╝╚═════╝░");
-            Thread.Sleep(250);
-            Console.SetCursorPosition(0, 12);
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(" Instructions");
             Console.WriteLine(
                 " You have received an encrypted message, but it's encrypted... So, in order to decipher it yo need to crack a 4 letter code before anything\n" +
                 " Be careful though, as you have a limited number of attempts before the message gets destroyed\n\n" +
-
                 " How it works\n" +
                 " Introduce 4 letters from A to F\n" +
                 " If you introduce the right code, congrats! You did it\n" +
@@ -81,22 +57,22 @@ namespace mastermind
                 {
                     case '1':
                         Game game = new Game();
-                        bool result = game.Start(settings);
+                        bool result = game.Start(Settings);
                         if (result)
                             Sequences.Win();
                         else
                             Sequences.Lose();
-                        break;
+                        return false;
                     case '2':
-                        Settings();
-                        break;
+                        SettingsLoad();
+                        return false;
                     case 'x':
                         return true;
                 }
             } while (true);
         }
 
-        static bool KeepCurrent()
+        public bool KeepCurrent()
         {
             Console.WriteLine("Invalid input, keep current? (Y/n)");
 
@@ -111,45 +87,78 @@ namespace mastermind
                         return false;
                 }
             } while (true);
-
         }
 
-        /*static void SettingsLoad()
+        public void SettingsLoad()
         {
-            Console.Clear();
-            Console.WriteLine("[1] New Settings");
-            Console.WriteLine("[2] Load Settings");
+           
             do
-            {
-                var check = Console.ReadKey();
+            { 
+                Console.Clear();
+                Console.WriteLine("[1] New Settings");
+                Console.WriteLine("[2] Load Settings");
+                Console.WriteLine("[3] Save Settings");
+                Console.WriteLine("[x] Return to menu");
+                ConsoleKeyInfo check = Console.ReadKey();
                 switch (check.KeyChar)
                 {
                     case '1':
-                        Settings();
+                        Settingsx();
                         break;
                     case '2':
+                        SettingsLoader();
                         break;
-
+                    case '3':
+                        SettingsSaver();
+                        break;
+                    case 'x':
+                        return;
                 }
             } while (true);
-        }*/
-        //Unimplemented code due issues to saving/loading settings file
-        public void Settings()
+        }
+
+        public void SettingsSaver()
+        {
+            TextWriter saver = new StreamWriter("../../../Settings.txt");
+            saver.WriteLine("{0} {1} {2} {3} {4}",Settings[0],Settings[1],Settings[2],Settings[3],Settings[4]);
+            saver.Close();
+            Console.WriteLine("Saved! Press any key to continue");
+            Console.ReadKey();
+        }
+
+        public void SettingsLoader()
+        {
+            TextReader loader = new StreamReader("../../../Settings.txt");
+            string[] loadData = loader.ReadLine().Split(' ');
+            for (int i = 0; i < Settings.LongLength; i++)
+            {
+               Settings[i] = Convert.ToInt32(loadData[i]);
+            }
+            loader.Close();
+            Console.WriteLine("Loaded! Press any key to continue");
+            Console.ReadKey();
+        }
+
+        public void Settingsx()
         {
             Console.Clear();
             int[,] settingsBounds =
             {
-                {0, 1}, {5, 50}, {2, 10}, {3, 9}
+                {0, 1}, {5, 50}, {2, 10}, {3, 9}, {0,2}
             }; //InputType(min,max), MaxAttemps(min,max), Positions(min,max), Optionamont (min,max)
             string[] settingsPrompt =
             {
-                "Introduce input type(0:Letters, 1:Numbers, Current: " + settings[0] + ")",
-                "Introduce max attempts per game (Min: 5,Max: 50 and Current: " + settings[1] + ")",
-                "Introduce amount of letter/numbers to guess (Min 2:, Max: 10 and Current: " + settings[2] + ")",
-                "Introduce amount of options avaiable (EX 3 = A,B,C/1,2,3 | 6=A,B,C,D,E,F/1,2,3,4,5,6) (Min: 3, Max: 9, Current: " +
-                settings[3] + ")"
+                "Introduce input type(0:Letters, 1:Numbers, Current: " + Settings[0] + ")",
+                "Introduce max attempts per game (Min: 5,Max: 50 and Current: " + Settings[1] + ")",
+                "Introduce amount of letter/numbers to guess (Min 2:, Max: 10 and Current: " + Settings[2] + ")",
+                "Introduce amount of options avaiable (EX 3 = A,B,C/1,2,3 | 6=A,B,C,D,E,F/1,2,3,4,5,6) (Min: 3, Max: 9, Current: " + Settings[3] + ")",
+                "Introduce validation method:\n" +
+                " 0 No validation      (accepts any character, empty will be replaced by stars)\n" +
+                " 1 Errors Happen      (if characters are invalid, will prompt you to put correct values within bounds)\n" +
+                " 2 Random             (if values are invalid, will replace invalid values b6y totally random ones)\n" +
+                "Current: " + Settings[4]
             };
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 5; i++)
             {
                 bool validInput = false;
                 do
@@ -164,14 +173,14 @@ namespace mastermind
                     }
                     else
                     {
-                        settings[i] = input;
+                        Settings[i] = input;
                         validInput = true;
                     }
                 } while (!validInput);
             }
 
-            Console.WriteLine("Settings Saved");
-            Thread.Sleep(500);
+            Console.WriteLine("Settings Saved, press any key to continue");
+            Console.ReadKey();
         }
     }
 }
