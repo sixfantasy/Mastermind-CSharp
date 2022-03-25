@@ -1,21 +1,29 @@
 ﻿using System;
 using System.IO;
+using static mastermind.Ranking;
+using static mastermind.Settings;
 
 namespace mastermind
 {
+    /// <summary>
+    /// Main class for mastermind menus, for starting a game and settings
+    /// </summary>
     class Mastermindbase
     {
-        public int[] Settings = {0, 10, 4, 6, 2}; //inputType, maxAttempts, positions, optionAmount, Validation
 
+        /// <summary>
+        /// Starts Mastermind
+        /// </summary>
         static void Main()
         {
-            Mastermindbase mastermind = new Mastermindbase();
-            mastermind.Start();
+            Start();
         }
 
-        public void Start()
+        /// <summary>
+        /// Manages mastermind main menu
+        /// </summary>
+        public static void Start()
         {
-             
             bool end;
             do
             {
@@ -26,13 +34,15 @@ namespace mastermind
             } while (!end);
         }
 
-
-        public void ShowMenu()
+        /// <summary>
+        /// Shows MasterMind main menu;
+        /// </summary>
+        public static void ShowMenu()
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(" Instructions");
             Console.WriteLine(
-                " You have received an encrypted message, but it's encrypted... So, in order to decipher it yo need to crack a 4 letter code before anything\n" +
+                " You have received a message, but it's encrypted... So, in order to decipher it you need to crack a 4 letter code before anything\n" +
                 " Be careful though, as you have a limited number of attempts before the message gets destroyed\n\n" +
                 " How it works\n" +
                 " Introduce 4 letters from A to F\n" +
@@ -44,27 +54,36 @@ namespace mastermind
                 " That's All, Have Fun!!!");
             Console.SetCursorPosition(0, Console.CursorTop + 3);
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("[1]:Start Game");
-            Console.WriteLine("[2]:Settings");
+            Console.WriteLine("[1]:Start Game(Free Game)");
+            Console.WriteLine("[2]:Start Game(Ranked Game)");
+            Console.WriteLine("[3]:Settings");
             Console.WriteLine("[x]:Close Game");
         }
 
-        public bool ChooseOption()
+        /// <summary>
+        /// Manages Mastermaind menu options
+        /// </summary>
+        /// <returns>Binary result to indicate when program should close</returns>
+        public static bool ChooseOption()
         {
             do
             {
+                bool result;
                 var input = Console.ReadKey();
                 switch (input.KeyChar)
                 {
                     case '1':
                         Game game = new Game();
-                        bool result = game.Start(Settings);
+                        result = game.Start(out int i);
                         if (result)
                             Sequences.Win();
                         else
                             Sequences.Lose();
                         return false;
                     case '2':
+                        RMenu();
+                        return false;
+                    case '3':
                         SettingsLoad();
                         return false;
                     case 'x':
@@ -73,115 +92,79 @@ namespace mastermind
             } while (true);
         }
 
-        public bool KeepCurrent()
+        /// <summary>
+        /// Menu for ranked mastermind
+        /// </summary>
+        public static void RMenu()
         {
-            Console.WriteLine("Invalid input, keep current? (Y/n)");
-
+            Directory.SetCurrentDirectory("../..");
+            Console.WriteLine("[1]:Easy (Letters:ABCD Amount:4 Attempts:10)");
+            Console.WriteLine("[2]:Medium(Letters:ABCDEF Amount:4 Attempts:10)");
+            Console.WriteLine("[3]:Hard(Letters:ABCDEFGH Amount:6 Attempts:12)");
+            Console.WriteLine("[x]:Return to main menu");
+            var input = Console.ReadKey();
+            string difficulty = "";
+            bool startFlag = false;
             do
             {
-                var check = Console.ReadKey();
-                switch (check.Key)
-                {
-                    case ConsoleKey.Y:
-                        return true;
-                    case ConsoleKey.N:
-                        return false;
-                }
-            } while (true);
-        }
-
-        public void SettingsLoad()
-        {
-           
-            do
-            { 
-                Console.Clear();
-                Console.WriteLine("[1] New Settings");
-                Console.WriteLine("[2] Load Settings");
-                Console.WriteLine("[3] Save Settings");
-                Console.WriteLine("[x] Return to menu");
-                ConsoleKeyInfo check = Console.ReadKey();
-                switch (check.KeyChar)
+                switch (input.KeyChar)
                 {
                     case '1':
-                        Settingsx();
+                        CurrentSettings = new[] {0, 10, 4, 4, 2};
+                        difficulty = "Easy";
+                        startFlag = true;
                         break;
                     case '2':
-                        SettingsLoader();
+                        CurrentSettings = new[] {0, 10, 4, 6, 2};
+                        difficulty = "Medium";
+                        startFlag = true;
                         break;
                     case '3':
-                        SettingsSaver();
+                        CurrentSettings = new[] {0, 12, 6, 8, 2};
+                        difficulty = "Hard";
+                        startFlag = true;
                         break;
                     case 'x':
                         return;
                 }
-            } while (true);
-        }
+            } while (!startFlag);
 
-        public void SettingsSaver()
-        {
-            TextWriter saver = new StreamWriter("../../../Settings.txt");
-            saver.WriteLine("{0} {1} {2} {3} {4}",Settings[0],Settings[1],Settings[2],Settings[3],Settings[4]);
-            saver.Close();
-            Console.WriteLine("Saved! Press any key to continue");
-            Console.ReadKey();
+            RPlay(difficulty);
         }
-
-        public void SettingsLoader()
+        /// <summary>
+        /// Plays a ranked game
+        /// </summary>
+        /// <param name="difficulty">Difficulty for the ranked game</param>
+        public static void RPlay(string difficulty)
         {
-            TextReader loader = new StreamReader("../../../Settings.txt");
-            string[] loadData = loader.ReadLine().Split(' ');
-            for (int i = 0; i < Settings.LongLength; i++)
+            Game rGame = new Game();
+            bool win = rGame.Start(out int attemptsDone);
+            if (win)
             {
-               Settings[i] = Convert.ToInt32(loadData[i]);
+                Sequences.Win();
+                highscoreMenu(difficulty, attemptsDone);
             }
-            loader.Close();
-            Console.WriteLine("Loaded! Press any key to continue");
-            Console.ReadKey();
-        }
-
-        public void Settingsx()
-        {
-            Console.Clear();
-            int[,] settingsBounds =
+            else
             {
-                {0, 1}, {5, 50}, {2, 10}, {3, 9}, {0,2}
-            }; //InputType(min,max), MaxAttemps(min,max), Positions(min,max), Optionamont (min,max)
-            string[] settingsPrompt =
-            {
-                "Introduce input type(0:Letters, 1:Numbers, Current: " + Settings[0] + ")",
-                "Introduce max attempts per game (Min: 5,Max: 50 and Current: " + Settings[1] + ")",
-                "Introduce amount of letter/numbers to guess (Min 2:, Max: 10 and Current: " + Settings[2] + ")",
-                "Introduce amount of options avaiable (EX 3 = A,B,C/1,2,3 | 6=A,B,C,D,E,F/1,2,3,4,5,6) (Min: 3, Max: 9, Current: " + Settings[3] + ")",
-                "Introduce validation method:\n" +
-                " 0 No validation      (accepts any character, empty will be replaced by stars)\n" +
-                " 1 Errors Happen      (if characters are invalid, will prompt you to put correct values within bounds)\n" +
-                " 2 Random             (if values are invalid, will replace invalid values b6y totally random ones)\n" +
-                "Current: " + Settings[4]
-            };
-            for (int i = 0; i < 5; i++)
-            {
-                bool validInput = false;
-                do
-                {
-                    Console.WriteLine(settingsPrompt[i]);
-                    bool validNumber = Int32.TryParse(Console.ReadLine(), out int input);
-                    if (!validNumber || input < settingsBounds[i, 0] || input > settingsBounds[i, 1])
-                    {
-                        bool keep = KeepCurrent();
-                        if (keep)
-                            validInput = true;
-                    }
-                    else
-                    {
-                        Settings[i] = input;
-                        validInput = true;
-                    }
-                } while (!validInput);
+                HighscoreDisplayer();
+                Sequences.Lose();
             }
 
-            Console.WriteLine("Settings Saved, press any key to continue");
-            Console.ReadKey();
+            highscoreMenu(difficulty, attemptsDone);
+        }
+
+        /// <summary>
+        /// Menu to display and chanche hoighsocres after a ranked game
+        /// </summary>
+        /// <param name="difficulty">Difficulty of the ranked game played</param>
+        /// <param name="attemptsDone">Attempts used on the game itself</param>
+        public static void highscoreMenu(string difficulty, int attemptsDone)
+        {
+            string[,] highscore = ScoreReader(difficulty);
+            HighscoreDisplayer();
+            bool NewScoreFlag = NewScoreChecker(highscore, attemptsDone, out int place);
+            if (NewScoreFlag)
+                ScoreWriter(highscore, attemptsDone.ToString(), place);
         }
     }
 }
