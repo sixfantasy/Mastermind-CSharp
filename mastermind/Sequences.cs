@@ -2,9 +2,14 @@ using System;
 using System.Threading;
 
 namespace mastermind
-{
+{/// <summary>
+ /// Sequences/Effects/Animations for the game
+ /// </summary>
     public class Sequences
     {
+        /// <summary>
+        /// Victory sequence
+        /// </summary>
         public static void Win()
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
@@ -34,7 +39,9 @@ namespace mastermind
             Console.WriteLine("Press any key to finish");
             Console.ReadKey();
         }
-
+/// <summary>
+/// Defeat sequence
+/// </summary>
         public static void Lose()
         {
             Console.ForegroundColor = ConsoleColor.Gray;
@@ -52,7 +59,9 @@ namespace mastermind
             Console.WriteLine("Press any key to finish");
             Console.ReadKey();
         }
-
+/// <summary>
+/// Title introduction sequence
+/// </summary>
         public static void Intro()
         {
             Console.Clear();

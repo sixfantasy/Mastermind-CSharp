@@ -2,7 +2,9 @@ using System;
 using static mastermind.Settings;
 
 namespace mastermind
-{
+{/// <summary>
+ /// Class for the mastermind game itself
+ /// </summary>
     public class Game
     {
         private int InputType, MaxAttempts, Positions, OptionAmount, InputValidation; //Settings
@@ -50,7 +52,11 @@ namespace mastermind
             string final = new string(holder);
             return final;
         }
-
+/// <summary>
+/// Starts a mastremind game
+/// </summary>
+/// <param name="i">Attempts done at the current time before finish</param>
+/// <returns>True for wins, false for loses</returns>
         public bool Start(out int i)
         {
             Console.Clear();
@@ -63,7 +69,12 @@ namespace mastermind
             //Console.WriteLine(secretDisplay);
             return Play(secret, out i);
         }
-
+/// <summary>
+/// Plays the game
+/// </summary>
+/// <param name="secret">Secret code generated randomly</param>
+/// <param name="i">Attempts done at the current time before finish</param>
+/// <returns>True for wins, false for loses</returns>
         private bool Play(string secret, out int i){
             string guess;
             for (i = 0; i < MaxAttempts; i++)
@@ -76,7 +87,12 @@ namespace mastermind
             Console.WriteLine(secret);
             return false;
         }
-
+/// <summary>
+/// Player does one attempt to guess the code
+/// </summary>
+/// <param name="secret">Secret code generated randomly</param>
+/// <param name="i">Attempts done at the current time before finish</param>
+/// <returns>Guess code after proper validation</returns>
         private string DoAttempt(string secret, int i)
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -87,7 +103,11 @@ namespace mastermind
                 return InputConverter(WriteGuess(secret));
             return WriteGuess(secret);
         }
-
+/// <summary>
+/// Takes the player input for the guess
+/// </summary>
+/// <param name="secret">Secret code generated randomly</param>
+/// <returns>Guess code after validation</returns>
         private string WriteGuess(string secret)
         {
             bool valid = false;
@@ -101,12 +121,16 @@ namespace mastermind
                     guess = guess.Remove(guess.Length - 1);
                 if (InputType == 0) 
                     guess = InputConverter(guess);
-                valid = ValidateInput(ref guess,ref valid);
+                valid = ValidateInput(ref guess);
             } while (!valid);
             return guess;
         }
-
-        private bool ValidateInput(ref string guess, ref bool valid)
+/// <summary>
+/// Validates the input given by the player
+/// </summary>
+/// <param name="guess">Guess code to validate</param>
+/// <returns>Binary result that indicates if the input is valid or no</returns>
+        private bool ValidateInput(ref string guess)
         {
             char basex = ' ';
             switch (InputType)
@@ -146,6 +170,13 @@ namespace mastermind
             }
             return true;
         }
+/// <summary>
+/// Checks an attempt done by the player
+/// </summary>
+/// <param name="secret">Secret code</param>
+/// <param name="guess">Guess code sent by the player</param>
+/// <param name="index">Value to indicate where to write next hintr</param>
+/// <returns>Binary result, true if secret matches guess (Game is won)</returns>
         private bool CheckAttempt(string secret, string guess, int index)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -165,7 +196,12 @@ namespace mastermind
                 return true;
             return false;
         }
-
+/// <summary>
+/// Check coorrect letters in right position
+/// </summary>
+/// <param name="secretcheck">Temporary secret code used exclusively for checking purposes</param>
+/// <param name="guesscheck">Temporary guess code used exclusively for checking purposes</param>
+/// <returns>Amount of correct positions</returns>
         private int CheckCorrect(char[] secretcheck, char[] guesscheck)
         {
             int result = 0;
@@ -179,7 +215,12 @@ namespace mastermind
 
             return result;
         }
-
+/// <summary>
+/// Checks letters that are correct but in a wrong position
+/// </summary>
+/// <param name="secretcheck">Temporary secret code used exclusively for checking purposes</param>
+/// <param name="guesscheck">Temporary guess code used exclusively for checking purposes</param>
+/// <returns>Amount of misplaced letters</returns>
         private int CheckMisplaced(char[] secretcheck, char[] guesscheck)
         {
             int result = 0;
@@ -196,7 +237,13 @@ namespace mastermind
 
             return result;
         }
-
+/// <summary>
+/// Builds a hint for the user based on the guess
+/// </summary>
+/// <param name="correct">Amount of correct letters in right position</param>
+/// <param name="misplaced">Amount of correct letters in wrong position</param>
+/// <param name="guess">Guess code sent by the player</param>
+/// <returns>Hint ready to be written</returns>
         private string HintBuilder(int correct, int misplaced, string guess)
         {
             string hint = "";
